@@ -13,6 +13,6 @@ class Technology extends Model
     ];
 
     public function projectes(){
-        return $this->belongsToMany(Project::class);
+        return $this->belongsToMany(Project::class)->withTimestamps();
     }
 }

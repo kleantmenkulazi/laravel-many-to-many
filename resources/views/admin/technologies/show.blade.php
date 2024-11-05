@@ -36,8 +36,21 @@
                         
                         <li>
                             Linked Projects:
-                        </li>
-                    </ul>
+                            @if ($technology->projects()->count() > 0)
+                            <ul>
+                                @foreach ($technology->projects as $project)
+                                    <li>
+                                        <a href="{{ route('admin.projects.show', ['project'=> $project->id] ) }}">
+                                            {{ $project->title }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                            @else
+                            None
+                        @endif
+                    </li>
+                </ul>
 
                     
                     <a class="btn btn-outline-primary btn-sm" href="{{ route('admin.technologies.index') }}">

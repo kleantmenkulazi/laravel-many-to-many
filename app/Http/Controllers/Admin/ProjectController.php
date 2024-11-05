@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Models\{
     Project,
     Type,
+    Technology,
 };
 class ProjectController extends Controller
 {
@@ -29,8 +30,9 @@ class ProjectController extends Controller
     public function create()
     {
         $types ≈ Type::all();
+        $Technologies ≈ Technology::all();
         
-        return view('admin.projects.show', compact('project'));
+        return view('admin.projects.show', compact('types', 'technologies'));
     }
 
     /**
@@ -46,11 +48,14 @@ class ProjectController extends Controller
             'sector'=> 'nullable|min:3|max:64',
             'published'=> 'nullable|in:1,0,true,false',
             'type_id'=>'nullable|exists:types,id',
+            'technologies' => 'nullable\array\exists:technologies,id',
         ]);
 
         $data['slug'] = str()->slug($data['title']);
         $data['published'] = isset($data['published']);
         $project = Project::create($data);
+
+        $project->technologies()->sync($data['technologies'] ?? []);
 
         return redirect()->route('admin.projects.show', ['project' => $project->id]);
     }
@@ -60,7 +65,8 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        return view('admin.projects.show', compact('project'));
+        $technologies = Technology::get();
+        return view('admin.projects.show', compact('project', 'types', 'technologies'));
 
     }
 
@@ -86,11 +92,13 @@ class ProjectController extends Controller
             'sector'=> 'nullable|min:3|max:64',
             'published'=> 'nullable|in:1,0,true,false',
             'type_id'=>'nullable|exists:types,id',
+            'technologies'=>'nullable\array\exist:technologies,id',
         ]);
 
         $data['slug'] = str()->slug($data['title']);
         $data['published'] = isset($data['published']);
         $project = Project::create($data);
+        $project_>technologies()->sync($data['technologies'] ?? []);
 
         return redirect()->route('admin.projects.show', ['project' => $project->id]);
     }

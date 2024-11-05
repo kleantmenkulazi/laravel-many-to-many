@@ -34,6 +34,8 @@
                           <tr>
                             <th scope="col">#</th>
                             <th scope="col">Title</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Technologies</th>
                             <th scope="col">Client</th>
                             <th scope="col">Sector</th>
                             <th scope="col">Published</th>
@@ -60,6 +62,14 @@
                                             
                                         
                                         
+                                        </td>
+
+                                        <td>
+                                            @foreach ($project->technologies as $technology)
+                                            <a href="{{ route('admin.technologies.show', ['technology' => $technology->id])}}" class="badge rounded-pill text-bg-primary py-2 mb-3 d-block">
+                                            {{ $technology->title}}
+                                        </a>
+                                        @endforeach
                                         </td>
 
                                 

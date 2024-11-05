@@ -12,7 +12,6 @@
                     </h1>
 
                     <h6>
-                    
                         Created at {{ $project->created_at->format('d/m/Y - H:i')}}
                     </h6>
                 </div>
@@ -23,17 +22,16 @@
     <div class="row">
         <div class="col">
             <div class="card">
-                <img src="{{ $project->card }}" class="card-img-top" alt="{{ $project->title }}">
+                <img src="{{ $project->cover }}" class="card-img-top" alt="{{ $project->title }}">
 
                 <div class="card-body">
                     <ul>
                         <li>
                             ID: {{ $project->id }}
                         </li>
+
                         <li>
                             Slug: {{ $project->slug }}
-                        </li>
-                        <li>
                         </li>
                         <li>
                             Client: {{ $project->client }}
@@ -41,6 +39,11 @@
                         <li>
                             Sector: {{ $project->sector }}
                         </li>
+                        <li>
+                            Published: {{ $project->published ? 'Yes' : 'No' }}
+                        </li>
+
+                        
                         <li>
                             Type:
                             @if (isset($project->type))
@@ -51,20 +54,31 @@
                                 -
                             @endif
                         </li>
+                        <li>
+                            Technologies:
+                            <ul>
+                                @foreach ($project->technologies as $technology)
+                                    <li>
+                                        <a href="{{ route('admin.technologies.show', ['technology' => $technology->id] ) }}" class="badge rounded-pill text-bg-primary">
+                                            {{ $technology->title }} 
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </li>
 
                     </ul>
 
                     <p class="mb-4">
                         Description:
                         <br>
-                        {{-- per mantenere gli a capo quando visualizzo la descrizione --}}
                         {!! nl2br($project->description) !!}
                     </p>
                     <a class="btn btn-outline-primary btn-sm" href="{{ route('admin.projects.index') }}">
-                        ▤
+                        
                     </a>
                     <a class="btn btn-outline-warning btn-sm" href="{{ route('admin.projects.edit', ['project' => $project->id]) }}">
-                        ໒(⊙ᴗ⊙)७✎
+                        ໒(•ᴗ•)७✎
                     </a>
                     <form action="{{ route('admin.projects.destroy', ['project'=> $project->id] ) }}" method="POST" class="d-inline-block"
                         onsubmit="return confirm('Are u sure u want to delete this project? ໒(x‸x)७')"    

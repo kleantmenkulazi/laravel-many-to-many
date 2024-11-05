@@ -41,6 +41,9 @@
                                 <tr>
                                     <th scope="row">{{ $technology->id }}</th>
                                     <td>{{ $technology->title }}</td>
+                                    <td>
+                                        {{ count($technology->projects)}}
+                                    </td>
 
                                     <td>
                                         <a class="btn btn-outline-primary btn-sm" href="{{ route('admin.technologies.show', ['technology' => $technology->id]) }}">
