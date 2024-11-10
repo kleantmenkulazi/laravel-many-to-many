@@ -32,7 +32,7 @@
             <div class="card">
                 <div class="card-body">
 
-                    <form action="{{ route('admin.projects.store')}}" method="POST">
+                    <form action="{{ route('admin.projects.store')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         
                         <div class="mb-3">
@@ -51,9 +51,9 @@
 
                         <div class="mb-3">
                             <label for="cover" class="form-label">
-                                Cover
+                                Cover - File
                             </label>
-                            <input type="text" class="form-control" id="cover" name="cover" placeholder="Insert the link of the image...">
+                            <input type="file" id="cover" name="cover" placeholder="Choose a cover image..." class="form-control">
                         </div>
 
                         <div class="mb-3">
@@ -94,6 +94,22 @@
                                 @endforeach
 
                             </select>
+                        </div>
+                        <div class="mb-5">
+
+                            <div>
+                                <label class="form-label">Technologies</label>
+                            </div>
+
+                            @foreach ($technologies as $technology)
+                                <div class="form-check d-inline-block me-4">
+                                    <input class="form-check-input" type="checkbox" value="{{ $technology->id}}" id="technology-{{ $technology->id}}" name="technologies[]">
+                                    <label class="form-check-label" for="technology-{{ $technology->id}}">
+                                        {{ $technology->title }}
+                                    </label>   
+                                </div>
+                            @endforeach
+
                         </div>
 
                     </div>

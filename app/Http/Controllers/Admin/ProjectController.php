@@ -6,6 +6,8 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use Illuminate\Support\Facades\Storage;
+
 // Models
 use App\Models\{
     Project,
@@ -43,7 +45,7 @@ class ProjectController extends Controller
         $data = $request->validate([
             'title'=> 'required|min:3|max:64',
             'description'=> 'required|min:20|max:4096',
-            'cover'=> 'nullable|url|min:5|max:2048',
+            'cover'=> 'nullable|image|min:5|max:2048',
             'client'=> 'nullable|min:3|max:64',
             'sector'=> 'nullable|min:3|max:64',
             'published'=> 'nullable|in:1,0,true,false',
@@ -53,6 +55,14 @@ class ProjectController extends Controller
 
         $data['slug'] = str()->slug($data['title']);
         $data['published'] = isset($data['published']);
+        if( isset($data['cover']) ){
+            $img_path = Storage::put('uploads', $data['cover']);
+            $data['cover'] = $img_path;
+        };
+
+
+
+
         $project = Project::create($data);
 
         $project->technologies()->sync($data['technologies'] ?? []);
@@ -87,16 +97,36 @@ class ProjectController extends Controller
         $data = $request->validate([
             'title'=> 'required|min:3|max:64',
             'description'=> 'required|min:20|max:4096',
-            'cover'=> 'nullable|url|min:5|max:2048',
+            'cover'=> 'nullable|image|min:5|max:2048',
             'client'=> 'nullable|min:3|max:64',
             'sector'=> 'nullable|min:3|max:64',
             'published'=> 'nullable|in:1,0,true,false',
             'type_id'=>'nullable|exists:types,id',
             'technologies'=>'nullable\array\exist:technologies,id',
+            'delete-cover' =>'nullable',
         ]);
 
         $data['slug'] = str()->slug($data['title']);
         $data['published'] = isset($data['published']);
+
+        if( isset($data['cover']) ){
+            if($project->cover){
+                Storage::delete($project->cover);
+                $project->cover = null;
+            }
+
+            $img_path = Storage::put('uploads', $data['cover']);
+            $data['cover'] = $img_path;
+        }
+        else if (isset($data['delete-cover'])){
+            if($project->cover){
+                Storage::delete($project->cover);
+                $project->cover = null;
+            }
+        }
+
+
+
         $project = Project::create($data);
         $project_>technologies()->sync($data['technologies'] ?? []);
 
@@ -108,6 +138,10 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        if($project->cover){
+            Storage::delete($project->cover);
+        }
+
         $project->delete();
 
         return redirect()->route('admin.projects.index');
