@@ -33,7 +33,7 @@
             <div class="card">
                 <div class="card-body">
 
-                    <form action="{{ route('admin.projects.update', ['project' => $project->id])}}" method="POST">
+                    <form action="{{ route('admin.projects.update', ['project' => $project->id])}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         
@@ -53,9 +53,22 @@
 
                         <div class="mb-3">
                             <label for="cover" class="form-label">
-                                Cover
+                                Cover - File
                             </label>
-                            <input value="{{ old('cover', $project->cover) }}" type="text" minlength="5" maxlength="2048" id="cover" name="cover" placeholder="Insert the link of the image..." class="form-control">
+                            <input type="file" id="cover" name="cover" placeholder="Choose a cover image..." class="form-control mb-3">
+                            @if ($project->cover)
+
+                                <p>Current cover:</p>
+                                <img src="{{ asset('/storage/'.$project->cover) }}" alt="{{ $project->title }}" class="rounded">   
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" id="delete-cover" name="delete-cover">
+                                    <label class="form-check-label" for="delete-cover">
+                                        Delete current cover
+                                    </label>
+                                </div>
+
+                            @endif
                         </div>
 
                         <div class="row mb-4">

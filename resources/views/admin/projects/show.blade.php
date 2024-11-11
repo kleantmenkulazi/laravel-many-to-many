@@ -22,7 +22,10 @@
     <div class="row">
         <div class="col">
             <div class="card">
-                <img src="{{ $project->cover }}" class="card-img-top" alt="{{ $project->title }}">
+                
+                @if ($project->cover)
+                    <img src="{{ asset('/storage/'.$project->cover) }}" alt="{{ $project->title }}" class="card-img-top">
+                @endif
 
                 <div class="card-body">
                     <ul>

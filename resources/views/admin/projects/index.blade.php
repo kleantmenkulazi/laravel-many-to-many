@@ -65,11 +65,12 @@
                                         </td>
 
                                         <td>
-                                            @foreach ($project->technologies as $technology)
+                                            @forelse ($project->technologies as $technology)
                                             <a href="{{ route('admin.technologies.show', ['technology' => $technology->id])}}" class="badge rounded-pill text-bg-primary py-2 mb-3 d-block">
                                             {{ $technology->title}}
                                         </a>
-                                        @endforeach
+                                        @empty
+                                        @endforelse
                                         </td>
 
                                 
